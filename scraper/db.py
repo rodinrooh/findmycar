@@ -34,33 +34,13 @@ def get_pointer(client) -> int | None:
 
 def save_pointer(client, pointer: int) -> None:
     """Persist the scraper pointer so the next run resumes from here."""
+    from datetime import datetime, timezone
     try:
         client.table("scraper_state").upsert(
-            {"id": 1, "last_pointer": pointer, "updated_at": "now()"}
+            {"id": 1, "last_pointer": pointer, "updated_at": datetime.now(timezone.utc).isoformat()}
         ).execute()
     except Exception as e:
         log.error("Failed to save pointer: %s", e)
-
-
-def get_resume_id(client, today_iso: str) -> int | None:
-    """
-    Returns the max vehicle_id already stored for today, or None.
-    Used to resume scraping without re-fetching already-stored records.
-    """
-    try:
-        resp = (
-            client.table("tows")
-            .select("vehicle_id")
-            .gte("towed_at", f"{today_iso}T00:00:00+00:00")
-            .order("vehicle_id", desc=True)
-            .limit(1)
-            .execute()
-        )
-        if resp.data:
-            return resp.data[0]["vehicle_id"]
-    except Exception as e:
-        log.error("Failed to query resume ID: %s", e)
-    return None
 
 
 def upsert_tow(client, tow: dict) -> None:

@@ -35,9 +35,6 @@ SESSION = requests.Session()
 SESSION.headers.update({"User-Agent": "Mozilla/5.0 (compatible; FindMyTowedCar/1.0)"})
 
 
-def jitter_sleep(base: float, jitter: float = 3.0) -> None:
-    time.sleep(base + random.uniform(0, jitter))
-
 
 def fetch_with_retry(vehicle_id: int) -> dict | str | None:
     """
