@@ -7,12 +7,7 @@ import logging
 import os
 import random
 import time
-from datetime import datetime
-from zoneinfo import ZoneInfo
-from urllib.parse import parse_qs, urlparse
-
 import requests
-from bs4 import BeautifulSoup
 from dotenv import load_dotenv
 from supabase import create_client
 
@@ -33,9 +28,7 @@ SUPABASE_URL = os.environ["SUPABASE_URL"]
 SUPABASE_KEY = os.environ["SUPABASE_KEY"]
 MAPBOX_TOKEN = os.environ["MAPBOX_TOKEN"]
 
-BASE_URL = "https://search.autoreturn.com"
-SEARCH_URL = BASE_URL + "/find-vehicle/results?regionState=CA&region=San+Francisco%2C+CA&towDate={date}"
-DETAIL_URL = BASE_URL + "/find-vehicle/details?vehicle={id}"
+DETAIL_URL = "https://search.autoreturn.com/find-vehicle/details?vehicle={id}"
 
 MAX_RUN_SECONDS = 270  # 4.5 min — exits before the next 5-min GHA trigger
 SESSION = requests.Session()
@@ -70,35 +63,11 @@ def fetch_with_retry(vehicle_id: int) -> dict | str | None:
     return None
 
 
-def find_todays_start_id(today: str) -> int:
-    """
-    Polls the SF search results page until at least one vehicle appears today.
-    Returns the vehicle_id of the first result.
-    """
-    url = SEARCH_URL.format(date=today)
-    while True:
-        try:
-            resp = SESSION.get(url, timeout=15)
-            resp.raise_for_status()
-            soup = BeautifulSoup(resp.text, "html.parser")
-            links = soup.select("a.ar-button-red")
-            if links:
-                href = links[0]["href"]
-                vid = int(parse_qs(urlparse(href).query)["vehicle"][0])
-                log.info("Found today's first SF vehicle_id: %d", vid)
-                return vid
-        except Exception as e:
-            log.warning("Error fetching search results: %s", e)
-        log.info("No SF tows found yet for %s. Retrying in 60s.", today)
-        time.sleep(60)
-
-
 def main() -> None:
-    today = datetime.now(ZoneInfo("America/Los_Angeles")).date().isoformat()
     start_time = time.monotonic()
 
     client = create_client(SUPABASE_URL, SUPABASE_KEY)
-    log.info("Scraper started. Today: %s", today)
+    log.info("Scraper started.")
 
     # Resume from persisted pointer (survives runs with zero SF tows found)
     pointer = db.get_pointer(client)
