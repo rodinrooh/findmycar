@@ -52,13 +52,13 @@ export default function CarRow({ tow, selected, onClick }: CarRowProps) {
     >
       {/* Circle with make initials */}
       <div
-        className="flex-shrink-0 w-[40px] h-[40px] rounded-full flex items-center justify-center tracking-wide"
+        className="flex-shrink-0 w-[40px] h-[40px] rounded-full flex items-center justify-center"
         style={{
           background: "linear-gradient(145deg, #adb2be, #717585)",
           color: "#fff",
           boxShadow: "0 1px 4px rgba(0,0,0,0.18)",
-          fontSize: 15,
-          fontWeight: 200,
+          font: "200 15px/1 -apple-system, BlinkMacSystemFont, sans-serif",
+          letterSpacing: "0.5px",
         }}
       >
         {makeInitials(tow.make)}
