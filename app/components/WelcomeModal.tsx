@@ -2,17 +2,30 @@
 
 import { useEffect, useState } from "react"
 
-export default function WelcomeModal() {
-  const [open, setOpen] = useState(false)
+interface WelcomeModalProps {
+  open?: boolean
+  onClose?: () => void
+}
+
+export default function WelcomeModal({ open: openProp, onClose: onCloseProp }: WelcomeModalProps = {}) {
+  const [internalOpen, setInternalOpen] = useState(false)
 
   useEffect(() => {
-    const seen = sessionStorage.getItem("welcome-seen")
-    if (!seen) setOpen(true)
-  }, [])
+    if (openProp === undefined) {
+      const seen = sessionStorage.getItem("welcome-seen")
+      if (!seen) setInternalOpen(true)
+    }
+  }, [openProp])
+
+  const open = openProp !== undefined ? openProp : internalOpen
 
   function dismiss() {
-    sessionStorage.setItem("welcome-seen", "1")
-    setOpen(false)
+    if (onCloseProp) {
+      onCloseProp()
+    } else {
+      sessionStorage.setItem("welcome-seen", "1")
+      setInternalOpen(false)
+    }
   }
 
   if (!open) return null

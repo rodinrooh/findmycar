@@ -4,6 +4,7 @@ import { useRef, useState } from "react"
 import type { Tow } from "@/lib/types"
 import CarList from "./CarList"
 import Leaderboard from "./Leaderboard"
+import WelcomeModal from "./WelcomeModal"
 
 type Tab = "cars" | "leaderboard"
 
@@ -24,6 +25,7 @@ export default function LeftPanel({ tows, selectedId, onSelect }: LeftPanelProps
   const [tab, setTab] = useState<Tab>("cars")
   const [search, setSearch] = useState("")
   const [mobileExpanded, setMobileExpanded] = useState(false)
+  const [showInfo, setShowInfo] = useState(false)
 
   const touchStartY = useRef(0)
   const touchStartedInList = useRef(false)
@@ -72,7 +74,7 @@ export default function LeftPanel({ tows, selectedId, onSelect }: LeftPanelProps
           <Leaderboard tows={tows} />
         )}
       </div>
-      <div className="px-5 py-3" style={{ borderTop: "1px solid rgba(0,0,0,0.06)" }}>
+      <div className="px-5 py-3 flex items-center justify-between" style={{ borderTop: "1px solid rgba(0,0,0,0.06)" }}>
         <a
           href="https://walzr.com/sf-parking/"
           target="_blank"
@@ -81,6 +83,13 @@ export default function LeftPanel({ tows, selectedId, onSelect }: LeftPanelProps
         >
           Inspired by Riley Walz
         </a>
+        <button
+          onClick={() => setShowInfo(true)}
+          className="w-6 h-6 rounded-full flex items-center justify-center text-[11px] font-semibold transition-opacity hover:opacity-70"
+          style={{ background: "rgba(0,0,0,0.07)", color: "#8e8e93" }}
+        >
+          i
+        </button>
       </div>
     </>
   )
@@ -99,6 +108,8 @@ export default function LeftPanel({ tows, selectedId, onSelect }: LeftPanelProps
         </div>
         {body}
       </div>
+
+      <WelcomeModal open={showInfo} onClose={() => setShowInfo(false)} />
 
       {/* Mobile: bottom sheet */}
       <div
