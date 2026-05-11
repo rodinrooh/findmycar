@@ -18,7 +18,6 @@ export function useTows() {
     const { data, error } = await supabase
       .from("tows")
       .select("*")
-      .gte("towed_at", todayStart())
       .order("towed_at", { ascending: false })
     if (!error && data) {
       setTows(data as Tow[])
@@ -32,5 +31,8 @@ export function useTows() {
     return () => clearInterval(interval)
   }, [])
 
-  return { tows, loading, refetch: fetchTows }
+  const today = todayStart()
+  const todayCount = tows.filter((t) => t.towed_at >= today).length
+
+  return { tows, loading, todayCount, refetch: fetchTows }
 }

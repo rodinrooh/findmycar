@@ -12,7 +12,7 @@ import { useTows } from "@/lib/useTows"
 import type { Tow } from "@/lib/types"
 
 export default function Home() {
-  const { tows, loading } = useTows()
+  const { tows, loading, todayCount } = useTows()
   const [selectedTow, setSelectedTow] = useState<Tow | null>(null)
   const mapRef = useRef<MapHandle>(null)
 
@@ -52,7 +52,7 @@ export default function Home() {
             boxShadow: "0 1px 8px rgba(0,0,0,0.12)",
           }}
         >
-          {tows.length} car{tows.length !== 1 ? "s" : ""} towed today
+          {todayCount} car{todayCount !== 1 ? "s" : ""} towed today
         </div>
       )}
 
