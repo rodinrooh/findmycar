@@ -26,14 +26,14 @@ export default function LeftPanel({ tows, loading, selectedId, onSelect }: LeftP
 
   return (
     <div
-      className="flex flex-col h-full"
+      className="absolute left-0 top-0 h-full flex flex-col"
       style={{
         width: 320,
-        minWidth: 320,
         borderRight: "1px solid rgba(0,0,0,0.1)",
-        background: "rgba(255,255,255,0.82)",
-        backdropFilter: "blur(20px)",
-        WebkitBackdropFilter: "blur(20px)",
+        background: "rgba(255,255,255,0.75)",
+        backdropFilter: "blur(24px)",
+        WebkitBackdropFilter: "blur(24px)",
+        zIndex: 10,
       }}
     >
       {/* Header */}

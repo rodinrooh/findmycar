@@ -1,7 +1,7 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import { getCarColor, getStatusColor } from "@/lib/colorMap"
+import { getStatusColor } from "@/lib/colorMap"
 import type { Tow } from "@/lib/types"
 
 function relativeTime(isoString: string): string {
@@ -41,26 +41,20 @@ export default function CarRow({ tow, selected, onClick }: CarRowProps) {
     return () => clearInterval(interval)
   }, [tow.towed_at])
 
-  const circleColor = getCarColor(tow.color)
   const statusColor = getStatusColor(tow.status)
-  const isLight = ["#f2f2f7", "#ffd60a"].includes(circleColor)
 
   return (
     <button
       onClick={onClick}
       className={`w-full text-left px-4 py-2.5 flex items-center gap-3 transition-colors ${
-        selected ? "bg-[#f2f2f7]" : "hover:bg-[#fafafa] active:bg-[#f2f2f7]"
+        selected ? "bg-black/5" : "hover:bg-black/[0.03] active:bg-black/5"
       }`}
       style={{ borderBottom: "1px solid rgba(0,0,0,0.05)" }}
     >
-      {/* Colored circle with make initials */}
+      {/* Circle with make initials */}
       <div
-        className="flex-shrink-0 w-[42px] h-[42px] rounded-full flex items-center justify-center text-[11px] font-bold tracking-wide"
-        style={{
-          background: circleColor,
-          color: isLight ? "#1c1c1e" : "#ffffff",
-          border: circleColor === "#f2f2f7" ? "1px solid #d1d1d6" : "none",
-        }}
+        className="flex-shrink-0 w-[40px] h-[40px] rounded-full flex items-center justify-center text-[11px] font-semibold tracking-wide"
+        style={{ background: "#aeaeb2", color: "#fff" }}
       >
         {makeInitials(tow.make)}
       </div>

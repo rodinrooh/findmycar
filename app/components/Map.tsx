@@ -144,8 +144,7 @@ const Map = forwardRef<MapHandle, MapProps>(function Map({ tows, onSelectTow }, 
   return (
     <div
       ref={containerRef}
-      className="flex-1 h-full"
-      style={{ minWidth: 0 }}
+      className="absolute inset-0"
     />
   )
 })
