@@ -55,7 +55,7 @@ export default function CarRow({ tow, selected, onClick }: CarRowProps) {
       <div
         className="flex-shrink-0 w-[40px] h-[40px] rounded-full flex items-center justify-center text-[11px] font-semibold tracking-wide"
         style={{
-          background: "linear-gradient(145deg, #adb2be, #6c7080)",
+          background: "linear-gradient(145deg, #adb2be, #717585)",
           color: "#fff",
           border: "2px solid #fff",
           boxShadow: "0 1px 4px rgba(0,0,0,0.18)",
