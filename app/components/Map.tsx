@@ -56,6 +56,7 @@ const Map = forwardRef<MapHandle, MapProps>(function Map({ tows, onSelectTow }, 
         showsCompass: mk.FeatureVisibility.Adaptive,
         showsZoomControl: true,
         showsMapTypeControl: false,
+        padding: new mk.Padding({ top: 0, right: 0, bottom: 0, left: 320 }),
       })
 
       mapRef.current = map
