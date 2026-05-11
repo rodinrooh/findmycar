@@ -48,18 +48,18 @@ export default function CarRow({ tow, selected, onClick }: CarRowProps) {
   return (
     <button
       onClick={onClick}
-      className={`w-full text-left px-4 py-3 flex items-center gap-3 transition-colors ${
-        selected ? "bg-[#f2f2f7]" : "hover:bg-[#f9f9f9]"
+      className={`w-full text-left px-4 py-2.5 flex items-center gap-3 transition-colors ${
+        selected ? "bg-[#f2f2f7]" : "hover:bg-[#fafafa] active:bg-[#f2f2f7]"
       }`}
-      style={{ borderBottom: "1px solid #f2f2f7" }}
+      style={{ borderBottom: "1px solid rgba(0,0,0,0.05)" }}
     >
       {/* Colored circle with make initials */}
       <div
-        className="flex-shrink-0 w-10 h-10 rounded-full flex items-center justify-center text-xs font-bold"
+        className="flex-shrink-0 w-[42px] h-[42px] rounded-full flex items-center justify-center text-[11px] font-bold tracking-wide"
         style={{
           background: circleColor,
           color: isLight ? "#1c1c1e" : "#ffffff",
-          border: circleColor === "#f2f2f7" ? "1px solid #c7c7cc" : "none",
+          border: circleColor === "#f2f2f7" ? "1px solid #d1d1d6" : "none",
         }}
       >
         {makeInitials(tow.make)}
@@ -67,14 +67,18 @@ export default function CarRow({ tow, selected, onClick }: CarRowProps) {
 
       {/* Text content */}
       <div className="flex-1 min-w-0">
-        <div className="text-sm font-semibold text-[#1c1c1e] truncate">{formatCarTitle(tow)}</div>
-        <div className="text-xs text-[#6d6d72] truncate mt-0.5">{tow.towed_from ?? "Unknown location"}</div>
-        <div className="text-xs text-[#6d6d72] mt-0.5">{timeAgo}</div>
+        <div className="text-[14px] font-semibold text-[#1c1c1e] truncate leading-tight">
+          {formatCarTitle(tow)}
+        </div>
+        <div className="text-[12px] text-[#8e8e93] truncate mt-0.5 leading-tight">
+          {tow.towed_from ?? "Unknown location"}
+        </div>
+        <div className="text-[11px] text-[#aeaeb2] mt-0.5">{timeAgo}</div>
       </div>
 
       {/* Status badge */}
       <div
-        className="flex-shrink-0 px-2 py-0.5 rounded-full text-[10px] font-semibold text-white"
+        className="flex-shrink-0 px-2 py-[3px] rounded-full text-[10px] font-semibold text-white leading-none"
         style={{ background: statusColor }}
       >
         {tow.status ?? "—"}

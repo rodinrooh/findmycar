@@ -23,11 +23,19 @@ export default function LeftPanel({ tows, loading, selectedId, onSelect }: LeftP
       style={{ width: 320, minWidth: 320, borderRight: "1px solid #e5e5ea" }}
     >
       {/* Header */}
-      <div className="px-4 pt-5 pb-3">
-        <h1 className="text-[17px] font-semibold text-[#1c1c1e] tracking-tight">
-          Find My Towed Car
-        </h1>
-        <p className="text-xs text-[#8e8e93] mt-0.5">
+      <div className="px-5 pt-6 pb-2">
+        <div className="flex items-center gap-2.5 mb-0.5">
+          <div
+            className="w-7 h-7 rounded-lg flex items-center justify-center text-sm flex-shrink-0"
+            style={{ background: "linear-gradient(145deg, #ff3b30, #ff6b35)" }}
+          >
+            🚗
+          </div>
+          <h1 className="text-[17px] font-bold text-[#1c1c1e] tracking-tight">
+            Find My Towed Car
+          </h1>
+        </div>
+        <p className="text-xs text-[#8e8e93] pl-[38px]">
           {loading
             ? "Loading…"
             : `${tows.length} car${tows.length !== 1 ? "s" : ""} towed in SF today`}
@@ -35,9 +43,9 @@ export default function LeftPanel({ tows, loading, selectedId, onSelect }: LeftP
       </div>
 
       {/* Tab switcher */}
-      <div className="px-4 pb-3">
+      <div className="px-4 pt-3 pb-3">
         <div
-          className="flex rounded-lg p-0.5"
+          className="flex rounded-[10px] p-[3px]"
           style={{ background: "#e5e5ea" }}
         >
           <TabButton active={tab === "cars"} onClick={() => setTab("cars")}>

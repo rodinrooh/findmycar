@@ -7,6 +7,7 @@ import { useCallback, useRef, useState } from "react"
 import LeftPanel from "./components/LeftPanel"
 import Map, { type MapHandle } from "./components/Map"
 import DetailCard from "./components/DetailCard"
+import WelcomeModal from "./components/WelcomeModal"
 import { useTows } from "@/lib/useTows"
 import type { Tow } from "@/lib/types"
 
@@ -42,6 +43,7 @@ export default function Home() {
       {selectedTow && (
         <DetailCard tow={selectedTow} onClose={handleClose} />
       )}
+      <WelcomeModal />
     </div>
   )
 }
