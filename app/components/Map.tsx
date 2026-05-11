@@ -34,9 +34,11 @@ const Map = forwardRef<MapHandle, MapProps>(function Map({ tows, onSelectTow }, 
       // Remove sidebar padding so car lands at true screen center
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       mapRef.current.padding = new (mk as any).Padding({ top: 0, right: 0, bottom: 0, left: 0 })
-      const region = new mk.CoordinateRegion(
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const region = new (mk as any).CoordinateRegion(
         new mk.Coordinate(lat, lng),
-        new mk.CoordinateSpan(0.018, 0.018)
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        new (mk as any).CoordinateSpan(0.018, 0.018)
       )
       mapRef.current.setRegionAnimated(region, true)
     },
