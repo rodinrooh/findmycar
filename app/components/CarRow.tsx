@@ -49,15 +49,13 @@ export default function CarRow({ tow, selected, onClick }: CarRowProps) {
       className={`w-full text-left px-4 py-2.5 flex items-center gap-3 transition-colors ${
         selected ? "bg-black/5" : "hover:bg-black/[0.03] active:bg-black/5"
       }`}
-      style={{ borderBottom: "1px solid rgba(0,0,0,0.05)" }}
     >
       {/* Circle with make initials */}
       <div
-        className="flex-shrink-0 w-[40px] h-[40px] rounded-full flex items-center justify-center text-[11px] font-semibold tracking-wide"
+        className="flex-shrink-0 w-[46px] h-[46px] rounded-full flex items-center justify-center text-[12px] tracking-wide"
         style={{
           background: "linear-gradient(145deg, #adb2be, #717585)",
           color: "#fff",
-          border: "2px solid #fff",
           boxShadow: "0 1px 4px rgba(0,0,0,0.18)",
         }}
       >
@@ -66,18 +64,18 @@ export default function CarRow({ tow, selected, onClick }: CarRowProps) {
 
       {/* Text content */}
       <div className="flex-1 min-w-0">
-        <div className="text-[14px] font-semibold text-[#1c1c1e] truncate leading-tight">
+        <div className="text-[15px] font-medium text-[#1c1c1e] truncate leading-tight">
           {formatCarTitle(tow)}
         </div>
-        <div className="text-[12px] text-[#8e8e93] truncate mt-0.5 leading-tight">
+        <div className="text-[13px] text-[#8e8e93] truncate mt-0.5 leading-tight">
           {tow.towed_from ?? "Unknown location"}
         </div>
-        <div className="text-[11px] text-[#aeaeb2] mt-0.5">{timeAgo}</div>
+        <div className="text-[12px] text-[#aeaeb2] mt-0.5">{timeAgo}</div>
       </div>
 
       {/* Status badge */}
       <div
-        className="flex-shrink-0 px-2 py-[3px] rounded-full text-[10px] font-semibold text-white leading-none"
+        className="flex-shrink-0 px-2 py-[3px] rounded-full text-[10px] font-medium text-white leading-none"
         style={{ background: statusColor }}
       >
         {tow.status ?? "—"}
