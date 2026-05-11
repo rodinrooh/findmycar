@@ -21,6 +21,27 @@ def get_global_max_id(client) -> int | None:
     return None
 
 
+def get_pointer(client) -> int | None:
+    """Returns the last saved scraper pointer (persists across runs regardless of SF tows found)."""
+    try:
+        resp = client.table("scraper_state").select("last_pointer").eq("id", 1).execute()
+        if resp.data:
+            return resp.data[0]["last_pointer"]
+    except Exception as e:
+        log.error("Failed to get pointer: %s", e)
+    return None
+
+
+def save_pointer(client, pointer: int) -> None:
+    """Persist the scraper pointer so the next run resumes from here."""
+    try:
+        client.table("scraper_state").upsert(
+            {"id": 1, "last_pointer": pointer, "updated_at": "now()"}
+        ).execute()
+    except Exception as e:
+        log.error("Failed to save pointer: %s", e)
+
+
 def get_resume_id(client, today_iso: str) -> int | None:
     """
     Returns the max vehicle_id already stored for today, or None.

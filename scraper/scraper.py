@@ -100,20 +100,14 @@ def main() -> None:
     client = create_client(SUPABASE_URL, SUPABASE_KEY)
     log.info("Scraper started. Today: %s", today)
 
-    # Resume from last known position
-    resume_id = db.get_resume_id(client, today)
-    if resume_id:
-        pointer = resume_id
-        log.info("Resuming from vehicle_id=%d (found in Supabase).", pointer)
+    # Resume from persisted pointer (survives runs with zero SF tows found)
+    pointer = db.get_pointer(client)
+    if pointer:
+        log.info("Resuming from persisted pointer=%d.", pointer)
     else:
-        # New day or first run — start from global max to avoid skipping IDs
-        global_max = db.get_global_max_id(client)
-        if global_max:
-            pointer = global_max
-            log.info("New day rollover. Starting from global max vehicle_id=%d.", pointer)
-        else:
-            pointer = find_todays_start_id(today) - 1
-            log.info("First ever run. Starting from vehicle_id=%d.", pointer)
+        # First ever run — find today's first SF tow
+        pointer = find_todays_start_id(today) - 1
+        log.info("First ever run. Starting from vehicle_id=%d.", pointer)
 
     consecutive_errors = 0
 
@@ -156,6 +150,7 @@ def main() -> None:
         time.sleep(random.uniform(1, 3))
 
     elapsed = time.monotonic() - start_time
+    db.save_pointer(client, pointer)
     log.info("Scraper exiting after %.1fs. Final pointer: %d.", elapsed, pointer)
 
 
