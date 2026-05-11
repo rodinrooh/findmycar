@@ -94,15 +94,18 @@ export default function LeftPanel({ tows, selectedId, onSelect }: LeftPanelProps
           zIndex: 10,
           ...GLASS,
         }}
+        onClick={!mobileExpanded ? () => setMobileExpanded(true) : undefined}
       >
         <div
           className="flex justify-center items-center flex-shrink-0 cursor-pointer"
           style={{ paddingTop: 10, paddingBottom: 10, minHeight: 44 }}
-          onClick={() => setMobileExpanded((v) => !v)}
+          onClick={(e) => { e.stopPropagation(); setMobileExpanded((v) => !v) }}
         >
           <div className="w-9 h-[5px] rounded-full bg-[#c7c7cc]" />
         </div>
-        {body}
+        <div className="flex flex-col flex-1 overflow-hidden" onClick={(e) => e.stopPropagation()}>
+          {body}
+        </div>
       </div>
     </>
   )
