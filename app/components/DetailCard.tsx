@@ -104,25 +104,18 @@ export default function DetailCard({ tow, onClose }: DetailCardProps) {
         </div>
 
         {/* Fields */}
-        <div className="px-5 py-4 space-y-3">
-          <Field label="Towed from" value={tow.towed_from} />
-          <Field label="Towed by" value={tow.towed_by} />
-          <Field label="Reason" value={tow.reason} />
-          <Field label="Date & time" value={formatDateTime(tow.towed_at)} />
-          <Field label="Tow company" value={tow.tow_company} />
-          {tow.tow_company_address && (
-            <Field label="Impound address" value={tow.tow_company_address} />
-          )}
-          {tow.tr_number && <Field label="TR number" value={tow.tr_number} />}
-        </div>
-
-        {/* Cost estimate */}
-        <div
-          className="mx-5 mb-4 px-4 py-3 rounded-xl text-sm text-[#6d6d72]"
-          style={{ background: "#fff9e6", border: "1px solid #ffd60a" }}
-        >
-          <span className="font-semibold text-[#1c1c1e]">Estimated cost: </span>
-          ~$440–$500+ to retrieve. Increases $59/day in storage.
+        <div className="px-5 py-4">
+          <div className="rounded-xl overflow-hidden" style={{ background: "#f2f2f7" }}>
+            <FieldRow label="Towed from" value={tow.towed_from} />
+            <FieldRow label="Towed by" value={tow.towed_by} />
+            <FieldRow label="Reason" value={tow.reason} />
+            <FieldRow label="Date & time" value={formatDateTime(tow.towed_at)} />
+            <FieldRow label="Tow company" value={tow.tow_company} />
+            {tow.tow_company_address && (
+              <FieldRow label="Impound address" value={tow.tow_company_address} />
+            )}
+            {tow.tr_number && <FieldRow label="TR number" value={tow.tr_number} last />}
+          </div>
         </div>
 
         {/* Directions button */}
@@ -142,12 +135,15 @@ export default function DetailCard({ tow, onClose }: DetailCardProps) {
   )
 }
 
-function Field({ label, value }: { label: string; value: string | null | undefined }) {
+function FieldRow({ label, value, last }: { label: string; value: string | null | undefined; last?: boolean }) {
   if (!value) return null
   return (
-    <div>
-      <div className="text-xs font-semibold text-[#8e8e93] uppercase tracking-wide mb-0.5">{label}</div>
-      <div className="text-sm text-[#1c1c1e]">{value}</div>
+    <div
+      className="flex items-start gap-3 px-4 py-3"
+      style={last ? {} : { borderBottom: "1px solid rgba(0,0,0,0.07)" }}
+    >
+      <div className="text-[12px] font-medium text-[#8e8e93] w-[100px] flex-shrink-0 pt-px">{label}</div>
+      <div className="text-[13px] font-medium text-[#1c1c1e] flex-1 leading-snug">{value}</div>
     </div>
   )
 }

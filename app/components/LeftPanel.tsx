@@ -49,11 +49,6 @@ export default function LeftPanel({ tows, loading, selectedId, onSelect }: LeftP
             Find My Towed Car
           </h1>
         </div>
-        <p className="text-xs text-[#8e8e93] pl-[38px]">
-          {loading
-            ? "Loading…"
-            : `${tows.length} car${tows.length !== 1 ? "s" : ""} towed in SF today`}
-        </p>
       </div>
 
       {/* Search */}
