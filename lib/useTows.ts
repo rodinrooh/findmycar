@@ -4,10 +4,8 @@ import { useEffect, useState } from "react"
 import { supabase } from "./supabase"
 import type { Tow } from "./types"
 
-function todayStart(): string {
-  const d = new Date()
-  d.setHours(0, 0, 0, 0)
-  return d.toISOString()
+function sfDateString(date: Date): string {
+  return date.toLocaleDateString("en-CA", { timeZone: "America/Los_Angeles" }) // "YYYY-MM-DD"
 }
 
 export function useTows() {
@@ -31,8 +29,8 @@ export function useTows() {
     return () => clearInterval(interval)
   }, [])
 
-  const today = todayStart()
-  const todayCount = tows.filter((t) => t.towed_at >= today).length
+  const todayStr = sfDateString(new Date())
+  const todayCount = tows.filter((t) => sfDateString(new Date(t.towed_at)) === todayStr).length
 
   return { tows, loading, todayCount, refetch: fetchTows }
 }
