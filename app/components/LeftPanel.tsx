@@ -36,19 +36,11 @@ export default function LeftPanel({ tows, loading, selectedId, onSelect }: LeftP
         zIndex: 10,
       }}
     >
-      {/* Header */}
-      <div className="px-5 pt-6 pb-2">
-        <div className="flex items-center gap-2.5 mb-0.5">
-          <div
-            className="w-7 h-7 rounded-lg flex items-center justify-center text-sm flex-shrink-0"
-            style={{ background: "linear-gradient(145deg, #ff3b30, #ff6b35)" }}
-          >
-            🚗
-          </div>
-          <h1 className="text-[17px] font-bold text-[#1c1c1e] tracking-tight">
-            Find My Towed Car
-          </h1>
-        </div>
+      {/* Traffic lights */}
+      <div className="px-4 pt-4 pb-2 flex items-center gap-1.5">
+        <div className="w-3 h-3 rounded-full" style={{ background: "#ff5f57" }} />
+        <div className="w-3 h-3 rounded-full" style={{ background: "#febc2e" }} />
+        <div className="w-3 h-3 rounded-full" style={{ background: "#28c840" }} />
       </div>
 
       {/* Search */}
