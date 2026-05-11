@@ -7,7 +7,8 @@ import logging
 import os
 import random
 import time
-from datetime import date
+from datetime import datetime
+from zoneinfo import ZoneInfo
 from urllib.parse import parse_qs, urlparse
 
 import requests
@@ -93,20 +94,26 @@ def find_todays_start_id(today: str) -> int:
 
 
 def main() -> None:
-    today = date.today().isoformat()
+    today = datetime.now(ZoneInfo("America/Los_Angeles")).date().isoformat()
     start_time = time.monotonic()
 
     client = create_client(SUPABASE_URL, SUPABASE_KEY)
     log.info("Scraper started. Today: %s", today)
 
-    # Resume from last known position, or find today's first SF tow
+    # Resume from last known position
     resume_id = db.get_resume_id(client, today)
     if resume_id:
         pointer = resume_id
         log.info("Resuming from vehicle_id=%d (found in Supabase).", pointer)
     else:
-        pointer = find_todays_start_id(today) - 1  # will try pointer+1 in loop
-        log.info("Starting fresh from vehicle_id=%d.", pointer)
+        # New day or first run — start from global max to avoid skipping IDs
+        global_max = db.get_global_max_id(client)
+        if global_max:
+            pointer = global_max
+            log.info("New day rollover. Starting from global max vehicle_id=%d.", pointer)
+        else:
+            pointer = find_todays_start_id(today) - 1
+            log.info("First ever run. Starting from vehicle_id=%d.", pointer)
 
     consecutive_errors = 0
 

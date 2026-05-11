@@ -4,6 +4,23 @@ import logging
 log = logging.getLogger(__name__)
 
 
+def get_global_max_id(client) -> int | None:
+    """Returns the highest vehicle_id ever stored, for day-rollover resume."""
+    try:
+        resp = (
+            client.table("tows")
+            .select("vehicle_id")
+            .order("vehicle_id", desc=True)
+            .limit(1)
+            .execute()
+        )
+        if resp.data:
+            return resp.data[0]["vehicle_id"]
+    except Exception as e:
+        log.error("Failed to query global max ID: %s", e)
+    return None
+
+
 def get_resume_id(client, today_iso: str) -> int | None:
     """
     Returns the max vehicle_id already stored for today, or None.
