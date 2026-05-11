@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useRef, useState } from "react"
 import type { Tow } from "@/lib/types"
 import CarList from "./CarList"
 import Leaderboard from "./Leaderboard"
@@ -24,6 +24,22 @@ export default function LeftPanel({ tows, selectedId, onSelect }: LeftPanelProps
   const [tab, setTab] = useState<Tab>("cars")
   const [search, setSearch] = useState("")
   const [mobileExpanded, setMobileExpanded] = useState(false)
+
+  const touchStartY = useRef(0)
+  const touchStartedInList = useRef(false)
+  const listRef = useRef<HTMLDivElement>(null)
+
+  function onTouchStart(e: React.TouchEvent) {
+    touchStartY.current = e.touches[0].clientY
+    touchStartedInList.current = !!(listRef.current?.contains(e.target as Node))
+  }
+
+  function onTouchEnd(e: React.TouchEvent) {
+    if (touchStartedInList.current) return
+    const delta = touchStartY.current - e.changedTouches[0].clientY
+    if (delta > 40) setMobileExpanded(true)
+    if (delta < -40) setMobileExpanded(false)
+  }
 
   const filtered = search.trim()
     ? tows.filter((t) =>
@@ -49,7 +65,7 @@ export default function LeftPanel({ tows, selectedId, onSelect }: LeftPanelProps
           <TabButton active={tab === "leaderboard"} onClick={() => setTab("leaderboard")}>Leaderboard</TabButton>
         </div>
       </div>
-      <div className="flex flex-col flex-1 overflow-hidden">
+      <div ref={listRef} className="flex flex-col flex-1 overflow-hidden">
         {tab === "cars" ? (
           <CarList tows={filtered} selectedId={selectedId} onSelect={onSelect} />
         ) : (
@@ -94,18 +110,13 @@ export default function LeftPanel({ tows, selectedId, onSelect }: LeftPanelProps
           zIndex: 10,
           ...GLASS,
         }}
-        onClick={!mobileExpanded ? () => setMobileExpanded(true) : undefined}
+        onTouchStart={onTouchStart}
+        onTouchEnd={onTouchEnd}
       >
-        <div
-          className="flex justify-center items-center flex-shrink-0 cursor-pointer"
-          style={{ paddingTop: 10, paddingBottom: 10, minHeight: 44 }}
-          onClick={(e) => { e.stopPropagation(); setMobileExpanded((v) => !v) }}
-        >
+        <div className="flex justify-center items-center flex-shrink-0" style={{ paddingTop: 10, paddingBottom: 10, minHeight: 44 }}>
           <div className="w-9 h-[5px] rounded-full bg-[#c7c7cc]" />
         </div>
-        <div className="flex flex-col flex-1 overflow-hidden" onClick={(e) => e.stopPropagation()}>
-          {body}
-        </div>
+        {body}
       </div>
     </>
   )
