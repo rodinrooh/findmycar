@@ -38,7 +38,7 @@ const Map = forwardRef<MapHandle, MapProps>(function Map({ tows, onSelectTow }, 
       const region = new (mk as any).CoordinateRegion(
         new mk.Coordinate(lat, lng),
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        new (mk as any).CoordinateSpan(0.018, 0.018)
+        new (mk as any).CoordinateSpan(0.008, 0.008)
       )
       mapRef.current.setRegionAnimated(region, true)
     },
