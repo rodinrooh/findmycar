@@ -96,7 +96,8 @@ export default function LeftPanel({ tows, selectedId, onSelect }: LeftPanelProps
         }}
       >
         <div
-          className="flex justify-center pt-3 pb-1 flex-shrink-0 cursor-pointer"
+          className="flex justify-center items-center flex-shrink-0 cursor-pointer"
+          style={{ paddingTop: 10, paddingBottom: 10, minHeight: 44 }}
           onClick={() => setMobileExpanded((v) => !v)}
         >
           <div className="w-9 h-[5px] rounded-full bg-[#c7c7cc]" />
