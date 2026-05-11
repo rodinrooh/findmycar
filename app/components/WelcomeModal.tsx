@@ -40,6 +40,9 @@ export default function WelcomeModal() {
           <p className="text-sm text-[#8e8e93] text-center mt-1">
             San Francisco, live
           </p>
+          <p className="text-[11px] text-[#aeaeb2] text-center mt-2 leading-snug">
+            By Rodin Roohipour. Not affiliated with the San Francisco government or Apple&apos;s Find My.
+          </p>
         </div>
 
         {/* Divider */}
