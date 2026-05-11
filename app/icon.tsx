@@ -13,9 +13,8 @@ export default function Icon() {
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-          background: "linear-gradient(145deg, #ff3b30, #ff9f0a)",
-          borderRadius: 8,
-          fontSize: 20,
+          fontSize: 28,
+          lineHeight: 1,
         }}
       >
         🚗
