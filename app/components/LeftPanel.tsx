@@ -16,11 +16,25 @@ interface LeftPanelProps {
 
 export default function LeftPanel({ tows, loading, selectedId, onSelect }: LeftPanelProps) {
   const [tab, setTab] = useState<Tab>("cars")
+  const [search, setSearch] = useState("")
+
+  const filtered = search.trim()
+    ? tows.filter((t) =>
+        (t.license ?? "").toLowerCase().includes(search.trim().toLowerCase())
+      )
+    : tows
 
   return (
     <div
-      className="flex flex-col h-full bg-white"
-      style={{ width: 320, minWidth: 320, borderRight: "1px solid #e5e5ea" }}
+      className="flex flex-col h-full"
+      style={{
+        width: 320,
+        minWidth: 320,
+        borderRight: "1px solid rgba(0,0,0,0.1)",
+        background: "rgba(255,255,255,0.82)",
+        backdropFilter: "blur(20px)",
+        WebkitBackdropFilter: "blur(20px)",
+      }}
     >
       {/* Header */}
       <div className="px-5 pt-6 pb-2">
@@ -42,11 +56,26 @@ export default function LeftPanel({ tows, loading, selectedId, onSelect }: LeftP
         </p>
       </div>
 
+      {/* Search */}
+      <div className="px-4 pt-2 pb-1">
+        <input
+          type="text"
+          placeholder="Search by license plate…"
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          className="w-full px-3 py-1.5 rounded-[10px] text-[13px] outline-none"
+          style={{
+            background: "rgba(118,118,128,0.12)",
+            color: "#1c1c1e",
+          }}
+        />
+      </div>
+
       {/* Tab switcher */}
-      <div className="px-4 pt-3 pb-3">
+      <div className="px-4 pt-2 pb-3">
         <div
           className="flex rounded-[10px] p-[3px]"
-          style={{ background: "#e5e5ea" }}
+          style={{ background: "rgba(118,118,128,0.12)" }}
         >
           <TabButton active={tab === "cars"} onClick={() => setTab("cars")}>
             Cars
@@ -60,10 +89,22 @@ export default function LeftPanel({ tows, loading, selectedId, onSelect }: LeftP
       {/* Content */}
       <div className="flex flex-col flex-1 overflow-hidden">
         {tab === "cars" ? (
-          <CarList tows={tows} selectedId={selectedId} onSelect={onSelect} />
+          <CarList tows={filtered} selectedId={selectedId} onSelect={onSelect} />
         ) : (
           <Leaderboard tows={tows} />
         )}
+      </div>
+
+      {/* Footer credit */}
+      <div className="px-5 py-3" style={{ borderTop: "1px solid rgba(0,0,0,0.06)" }}>
+        <a
+          href="https://walzr.com/sf-parking/"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-[12px] text-[#8e8e93] hover:text-[#007aff] transition-colors"
+        >
+          Inspired by Riley Walz
+        </a>
       </div>
     </div>
   )

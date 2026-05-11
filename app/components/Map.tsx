@@ -106,20 +106,32 @@ const Map = forwardRef<MapHandle, MapProps>(function Map({ tows, onSelectTow }, 
     for (const tow of tows) {
       if (!tow.lat || !tow.lng) continue
       if (existing.has(tow.vehicle_id)) {
-        // Update color if status changed
         const ann = existing.get(tow.vehicle_id)
-        ann.color = getStatusColor(tow.status)
+        const el = ann.element as HTMLDivElement | undefined
+        if (el) el.style.background = getStatusColor(tow.status)
         continue
       }
 
-      const annotation = new mk.MarkerAnnotation(
+      const color = getStatusColor(tow.status)
+      const initials = (tow.make ?? "??").slice(0, 2).toUpperCase()
+
+      const annotation = new mk.Annotation(
         new mk.Coordinate(tow.lat, tow.lng),
-        {
-          color: getStatusColor(tow.status),
-          title: [tow.make, tow.model].filter(Boolean).join(" "),
-          subtitle: tow.towed_from ?? "",
-          animates: true,
-        }
+        () => {
+          const el = document.createElement("div")
+          el.textContent = initials
+          el.style.cssText = `
+            width:34px;height:34px;border-radius:50%;
+            background:${color};color:#fff;
+            display:flex;align-items:center;justify-content:center;
+            font:700 11px/1 -apple-system,BlinkMacSystemFont,sans-serif;
+            letter-spacing:.5px;
+            box-shadow:0 2px 8px rgba(0,0,0,.28);
+            cursor:pointer;
+          `
+          return el
+        },
+        { anchorOffset: new DOMPoint(0, 0) }
       )
 
       annotation.addEventListener("select", () => onSelectTow(tow))

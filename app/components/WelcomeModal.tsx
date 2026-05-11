@@ -55,7 +55,7 @@ export default function WelcomeModal() {
           <Row
             icon="🤫"
             title="Where's the data from?"
-            body="AutoReturn runs SF's impound lots and leaves their entire database wide open — no login, no key, just vibes. We poll it constantly."
+            body="AutoReturn manages SF's impound lots. Their search portal is publicly accessible with no login required. We check it every 5 minutes."
           />
           <Row
             icon="🫡"
@@ -63,7 +63,7 @@ export default function WelcomeModal() {
             body={
               <>
                 <a
-                  href="https://walzr.com/sf-parking/"
+                  href="https://walzr.com/"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="font-semibold text-[#007aff]"
@@ -79,7 +79,7 @@ export default function WelcomeModal() {
                 >
                   Find My Parking Cops
                 </a>
-                {" — same energy, different car."}
+                {"."}
               </>
             }
           />
