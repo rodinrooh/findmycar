@@ -115,7 +115,8 @@ const Map = forwardRef<MapHandle, MapProps>(function Map({ tows, onSelectTow }, 
       const color = getStatusColor(tow.status)
       const initials = (tow.make ?? "??").slice(0, 2).toUpperCase()
 
-      const annotation = new mk.Annotation(
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const annotation = new (mk as any).Annotation(
         new mk.Coordinate(tow.lat, tow.lng),
         () => {
           const el = document.createElement("div")
