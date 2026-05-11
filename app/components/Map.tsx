@@ -31,7 +31,6 @@ const Map = forwardRef<MapHandle, MapProps>(function Map({ tows, onSelectTow }, 
     flyTo(lat: number, lng: number) {
       if (!mapRef.current) return
       const mk = window.mapkit
-      // Remove sidebar padding so car lands at true screen center
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       mapRef.current.padding = new (mk as any).Padding({ top: 0, right: 0, bottom: 0, left: 0 })
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -45,8 +44,11 @@ const Map = forwardRef<MapHandle, MapProps>(function Map({ tows, onSelectTow }, 
     resetView() {
       if (!mapRef.current) return
       const mk = window.mapkit
+      const isMobile = window.innerWidth < 768
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      mapRef.current.padding = new (mk as any).Padding({ top: 0, right: 0, bottom: 0, left: 320 })
+      mapRef.current.padding = new (mk as any).Padding(
+        isMobile ? { top: 0, right: 0, bottom: 180, left: 0 } : { top: 0, right: 0, bottom: 0, left: 320 }
+      )
       mapRef.current.setCenterAnimated(new mk.Coordinate(SF_CENTER.latitude, SF_CENTER.longitude), true)
       mapRef.current.cameraDistance = 20000
     },
@@ -76,7 +78,11 @@ const Map = forwardRef<MapHandle, MapProps>(function Map({ tows, onSelectTow }, 
         showsZoomControl: true,
         showsMapTypeControl: false,
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        padding: new (mk as any).Padding({ top: 0, right: 0, bottom: 0, left: 320 }),
+        padding: new (mk as any).Padding(
+          window.innerWidth < 768
+            ? { top: 0, right: 0, bottom: 180, left: 0 }
+            : { top: 0, right: 0, bottom: 0, left: 320 }
+        ),
       })
 
       mapRef.current = map

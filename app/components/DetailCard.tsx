@@ -63,7 +63,9 @@ export default function DetailCard({ tow, onClose }: DetailCardProps) {
   return (
     <div
       ref={cardRef}
-      className="fixed right-6 top-1/2 -translate-y-1/2 z-50 w-[340px] rounded-2xl overflow-hidden"
+      className="fixed z-50
+        bottom-0 left-0 right-0 rounded-t-2xl
+        md:bottom-auto md:left-auto md:right-6 md:top-1/2 md:-translate-y-1/2 md:w-[340px] md:rounded-2xl"
       style={{
         maxHeight: "85vh",
         overflowY: "auto",

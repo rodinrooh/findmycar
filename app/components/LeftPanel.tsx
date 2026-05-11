@@ -14,9 +14,16 @@ interface LeftPanelProps {
   onSelect: (tow: Tow) => void
 }
 
-export default function LeftPanel({ tows, loading, selectedId, onSelect }: LeftPanelProps) {
+const GLASS: React.CSSProperties = {
+  background: "rgba(255,255,255,0.82)",
+  backdropFilter: "blur(24px)",
+  WebkitBackdropFilter: "blur(24px)",
+}
+
+export default function LeftPanel({ tows, selectedId, onSelect }: LeftPanelProps) {
   const [tab, setTab] = useState<Tab>("cars")
   const [search, setSearch] = useState("")
+  const [mobileExpanded, setMobileExpanded] = useState(false)
 
   const filtered = search.trim()
     ? tows.filter((t) =>
@@ -24,26 +31,8 @@ export default function LeftPanel({ tows, loading, selectedId, onSelect }: LeftP
       )
     : tows
 
-  return (
-    <div
-      className="absolute left-0 top-0 h-full flex flex-col"
-      style={{
-        width: 320,
-        borderRight: "1px solid rgba(0,0,0,0.1)",
-        background: "rgba(255,255,255,0.75)",
-        backdropFilter: "blur(24px)",
-        WebkitBackdropFilter: "blur(24px)",
-        zIndex: 10,
-      }}
-    >
-      {/* Traffic lights */}
-      <div className="px-4 pt-4 pb-2 flex items-center gap-1.5">
-        <div className="w-3 h-3 rounded-full" style={{ background: "#ff5f57" }} />
-        <div className="w-3 h-3 rounded-full" style={{ background: "#febc2e" }} />
-        <div className="w-3 h-3 rounded-full" style={{ background: "#28c840" }} />
-      </div>
-
-      {/* Search */}
+  const body = (
+    <>
       <div className="px-4 pt-2 pb-1">
         <input
           type="text"
@@ -51,29 +40,15 @@ export default function LeftPanel({ tows, loading, selectedId, onSelect }: LeftP
           value={search}
           onChange={(e) => setSearch(e.target.value)}
           className="w-full px-3 py-1.5 rounded-[10px] text-[13px] outline-none"
-          style={{
-            background: "rgba(118,118,128,0.12)",
-            color: "#1c1c1e",
-          }}
+          style={{ background: "rgba(118,118,128,0.12)", color: "#1c1c1e" }}
         />
       </div>
-
-      {/* Tab switcher */}
       <div className="px-4 pt-2 pb-3">
-        <div
-          className="flex rounded-[10px] p-[3px]"
-          style={{ background: "rgba(118,118,128,0.12)" }}
-        >
-          <TabButton active={tab === "cars"} onClick={() => setTab("cars")}>
-            Cars
-          </TabButton>
-          <TabButton active={tab === "leaderboard"} onClick={() => setTab("leaderboard")}>
-            Leaderboard
-          </TabButton>
+        <div className="flex rounded-[10px] p-[3px]" style={{ background: "rgba(118,118,128,0.12)" }}>
+          <TabButton active={tab === "cars"} onClick={() => setTab("cars")}>Cars</TabButton>
+          <TabButton active={tab === "leaderboard"} onClick={() => setTab("leaderboard")}>Leaderboard</TabButton>
         </div>
       </div>
-
-      {/* Content */}
       <div className="flex flex-col flex-1 overflow-hidden">
         {tab === "cars" ? (
           <CarList tows={filtered} selectedId={selectedId} onSelect={onSelect} />
@@ -81,8 +56,6 @@ export default function LeftPanel({ tows, loading, selectedId, onSelect }: LeftP
           <Leaderboard tows={tows} />
         )}
       </div>
-
-      {/* Footer credit */}
       <div className="px-5 py-3" style={{ borderTop: "1px solid rgba(0,0,0,0.06)" }}>
         <a
           href="https://walzr.com/sf-parking/"
@@ -93,7 +66,44 @@ export default function LeftPanel({ tows, loading, selectedId, onSelect }: LeftP
           Inspired by Riley Walz
         </a>
       </div>
-    </div>
+    </>
+  )
+
+  return (
+    <>
+      {/* Desktop: left sidebar */}
+      <div
+        className="hidden md:flex absolute left-0 top-0 h-full flex-col"
+        style={{ width: 320, borderRight: "1px solid rgba(0,0,0,0.1)", zIndex: 10, ...GLASS }}
+      >
+        <div className="px-4 pt-4 pb-2 flex items-center gap-1.5">
+          <div className="w-3 h-3 rounded-full" style={{ background: "#ff5f57" }} />
+          <div className="w-3 h-3 rounded-full" style={{ background: "#febc2e" }} />
+          <div className="w-3 h-3 rounded-full" style={{ background: "#28c840" }} />
+        </div>
+        {body}
+      </div>
+
+      {/* Mobile: bottom sheet */}
+      <div
+        className="md:hidden fixed bottom-0 left-0 right-0 flex flex-col rounded-t-[20px] overflow-hidden"
+        style={{
+          height: mobileExpanded ? "70vh" : 180,
+          transition: "height 0.3s cubic-bezier(0.32,0.72,0,1)",
+          boxShadow: "0 -2px 20px rgba(0,0,0,0.1)",
+          zIndex: 10,
+          ...GLASS,
+        }}
+      >
+        <div
+          className="flex justify-center pt-3 pb-1 flex-shrink-0 cursor-pointer"
+          onClick={() => setMobileExpanded((v) => !v)}
+        >
+          <div className="w-9 h-[5px] rounded-full bg-[#c7c7cc]" />
+        </div>
+        {body}
+      </div>
+    </>
   )
 }
 
