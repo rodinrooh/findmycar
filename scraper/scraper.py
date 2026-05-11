@@ -108,6 +108,8 @@ def main() -> None:
         pointer = find_todays_start_id(today) - 1  # will try pointer+1 in loop
         log.info("Starting fresh from vehicle_id=%d.", pointer)
 
+    consecutive_errors = 0
+
     while time.monotonic() - start_time < MAX_RUN_SECONDS:
         next_id = pointer + 1
         log.info("Trying vehicle_id=%d …", next_id)
@@ -115,10 +117,19 @@ def main() -> None:
         result = fetch_with_retry(next_id)
 
         if result == tow_parser.ERROR_SENTINEL:
-            # ID doesn't exist yet — wait and retry same pointer
-            log.info("vehicle_id=%d does not exist yet. Sleeping 60s.", next_id)
-            jitter_sleep(60, 3)
+            consecutive_errors += 1
+            if consecutive_errors >= 3:
+                # ID appears to be a permanent gap — skip it and move on
+                log.info("vehicle_id=%d skipped after %d attempts (gap in IDs).", next_id, consecutive_errors)
+                pointer = next_id
+                consecutive_errors = 0
+                time.sleep(random.uniform(1, 3))
+            else:
+                log.info("vehicle_id=%d does not exist yet (attempt %d). Sleeping 60s.", next_id, consecutive_errors)
+                jitter_sleep(60, 3)
             continue
+
+        consecutive_errors = 0
 
         if result is None:
             # Valid page but not SF — advance immediately
