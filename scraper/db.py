@@ -43,6 +43,21 @@ def save_pointer(client, pointer: int) -> None:
         log.error("Failed to save pointer: %s", e)
 
 
+def get_stored_ids(client, vehicle_ids: list[int]) -> set[int]:
+    """Returns which of the given vehicle_ids are already in Supabase."""
+    try:
+        resp = (
+            client.table("tows")
+            .select("vehicle_id")
+            .in_("vehicle_id", vehicle_ids)
+            .execute()
+        )
+        return {row["vehicle_id"] for row in resp.data}
+    except Exception as e:
+        log.error("Failed to query stored IDs: %s", e)
+    return set()
+
+
 def upsert_tow(client, tow: dict) -> None:
     """Upsert a tow record keyed on vehicle_id. Logs errors without raising."""
     try:

@@ -1,13 +1,19 @@
 """
 Find My Towed Car — Autura/AutoReturn scraper.
-Designed to run for ~4.5 minutes per GitHub Actions invocation (every 5 min cron).
-Resumes from Supabase max vehicle_id on restart.
+Runs for ~4.5 min per GitHub Actions invocation (every 5 min cron).
+Resumes via persisted pointer. Reconciles against search page each run
+to catch cars whose IDs appeared in AutoReturn after we passed them.
 """
 import logging
 import os
 import random
 import time
+from datetime import datetime
+from urllib.parse import parse_qs, urlparse
+from zoneinfo import ZoneInfo
+
 import requests
+from bs4 import BeautifulSoup
 from dotenv import load_dotenv
 from supabase import create_client
 
@@ -28,21 +34,15 @@ SUPABASE_URL = os.environ["SUPABASE_URL"]
 SUPABASE_KEY = os.environ["SUPABASE_KEY"]
 MAPBOX_TOKEN = os.environ["MAPBOX_TOKEN"]
 
+SEARCH_URL = "https://search.autoreturn.com/find-vehicle/results?regionState=CA&region=San+Francisco%2C+CA&towDate={date}"
 DETAIL_URL = "https://search.autoreturn.com/find-vehicle/details?vehicle={id}"
 
-MAX_RUN_SECONDS = 270  # 4.5 min — exits before the next 5-min GHA trigger
+MAX_RUN_SECONDS = 270
 SESSION = requests.Session()
 SESSION.headers.update({"User-Agent": "Mozilla/5.0 (compatible; FindMyTowedCar/1.0)"})
 
 
-
 def fetch_with_retry(vehicle_id: int) -> dict | str | None:
-    """
-    Fetches a detail page and parses it.
-    Returns: ERROR_SENTINEL | None (other city) | dict (SF tow)
-    Retries up to 3x with exponential backoff on network errors.
-    Returns None on repeated failure (pointer advances, we move on).
-    """
     for attempt in range(3):
         try:
             resp = SESSION.get(DETAIL_URL.format(id=vehicle_id), timeout=15)
@@ -60,18 +60,62 @@ def fetch_with_retry(vehicle_id: int) -> dict | str | None:
     return None
 
 
+def reconcile(client: object, today: str) -> None:
+    """
+    Fetch today's SF search page, find any vehicle_ids not yet in Supabase,
+    and store them. Catches cars whose AutoReturn entries appeared after
+    the sequential scraper already passed their ID.
+    """
+    try:
+        resp = SESSION.get(SEARCH_URL.format(date=today), timeout=15)
+        resp.raise_for_status()
+        soup = BeautifulSoup(resp.text, "html.parser")
+        links = soup.select("a.ar-button-red")
+        page_ids = set()
+        for link in links:
+            href = link.get("href", "")
+            try:
+                vid = int(parse_qs(urlparse(href).query)["vehicle"][0])
+                page_ids.add(vid)
+            except (KeyError, ValueError):
+                continue
+    except Exception as e:
+        log.warning("Reconcile: failed to fetch search page: %s", e)
+        return
+
+    if not page_ids:
+        log.info("Reconcile: no results on search page for %s.", today)
+        return
+
+    stored_ids = db.get_stored_ids(client, list(page_ids))
+    missing = page_ids - stored_ids
+    if not missing:
+        log.info("Reconcile: all %d search-page IDs already stored.", len(page_ids))
+        return
+
+    log.info("Reconcile: %d missing IDs to backfill: %s", len(missing), sorted(missing))
+    for vid in sorted(missing):
+        result = fetch_with_retry(vid)
+        if result and result != tow_parser.ERROR_SENTINEL:
+            lat, lng = geocoder.geocode(result["towed_from"], MAPBOX_TOKEN)
+            result["vehicle_id"] = vid
+            result["lat"] = lat
+            result["lng"] = lng
+            db.upsert_tow(client, result)
+        time.sleep(1)
+
+
 def main() -> None:
     start_time = time.monotonic()
+    today = datetime.now(ZoneInfo("America/Los_Angeles")).date().isoformat()
 
     client = create_client(SUPABASE_URL, SUPABASE_KEY)
-    log.info("Scraper started.")
+    log.info("Scraper started. Today: %s", today)
 
-    # Resume from persisted pointer (survives runs with zero SF tows found)
     pointer = db.get_pointer(client)
     if pointer:
         log.info("Resuming from persisted pointer=%d.", pointer)
     else:
-        # scraper_state table missing or empty — fall back to global max SF tow
         pointer = db.get_global_max_id(client) or 0
         log.info("No persisted pointer. Falling back to global max vehicle_id=%d.", pointer)
 
@@ -103,7 +147,6 @@ def main() -> None:
             time.sleep(random.uniform(1, 3))
             continue
 
-        # SF tow — geocode + upsert
         lat, lng = geocoder.geocode(result["towed_from"], MAPBOX_TOKEN)
         result["vehicle_id"] = next_id
         result["lat"] = lat
@@ -115,6 +158,8 @@ def main() -> None:
     elapsed = time.monotonic() - start_time
     db.save_pointer(client, pointer)
     log.info("Scraper exiting after %.1fs. Final pointer: %d.", elapsed, pointer)
+
+    reconcile(client, today)
 
 
 if __name__ == "__main__":
