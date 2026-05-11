@@ -105,12 +105,11 @@ def main() -> None:
     if pointer:
         log.info("Resuming from persisted pointer=%d.", pointer)
     else:
-        # First ever run — find today's first SF tow
-        pointer = find_todays_start_id(today) - 1
-        log.info("First ever run. Starting from vehicle_id=%d.", pointer)
+        # scraper_state table missing or empty — fall back to global max SF tow
+        pointer = db.get_global_max_id(client) or 0
+        log.info("No persisted pointer. Falling back to global max vehicle_id=%d.", pointer)
 
     consecutive_errors = 0
-    last_confirmed = pointer  # last ID that actually existed (SF or not)
 
     while time.monotonic() - start_time < MAX_RUN_SECONDS:
         next_id = pointer + 1
@@ -130,9 +129,7 @@ def main() -> None:
                 time.sleep(10)
             continue
 
-        # Page exists — update confirmed floor regardless of city
         consecutive_errors = 0
-        last_confirmed = next_id
 
         if result is None:
             log.info("vehicle_id=%d is not SF. Advancing.", next_id)
@@ -150,9 +147,8 @@ def main() -> None:
         time.sleep(random.uniform(1, 3))
 
     elapsed = time.monotonic() - start_time
-    # Save last confirmed (existing) ID so frontier gaps get re-checked next run
-    db.save_pointer(client, last_confirmed)
-    log.info("Scraper exiting after %.1fs. Last confirmed: %d, final pointer: %d.", elapsed, last_confirmed, pointer)
+    db.save_pointer(client, pointer)
+    log.info("Scraper exiting after %.1fs. Final pointer: %d.", elapsed, pointer)
 
 
 if __name__ == "__main__":
