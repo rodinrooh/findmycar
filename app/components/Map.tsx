@@ -52,7 +52,7 @@ const Map = forwardRef<MapHandle, MapProps>(function Map({ tows, onSelectTow }, 
 
       const map = new mk.Map(containerRef.current, {
         center: new mk.Coordinate(SF_CENTER.latitude, SF_CENTER.longitude),
-        cameraDistance: 25000,
+        cameraDistance: 12000,
         showsCompass: mk.FeatureVisibility.Adaptive,
         showsZoomControl: true,
         showsMapTypeControl: false,

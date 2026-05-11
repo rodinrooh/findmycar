@@ -63,7 +63,7 @@ export default function WelcomeModal() {
             body={
               <>
                 <a
-                  href="https://walzr.com/"
+                  href="https://walzr.com/sf-parking/"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="font-semibold text-[#007aff]"
@@ -72,7 +72,7 @@ export default function WelcomeModal() {
                 </a>
                 {" and his "}
                 <a
-                  href="https://walzr.com/find-my-parking-cops"
+                  href="https://walzr.com/sf-parking/"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="font-semibold text-[#007aff]"
