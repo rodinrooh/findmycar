@@ -143,7 +143,7 @@ export default function Leaderboard({ tows }: LeaderboardProps) {
       {/* Hourly bar chart */}
       <section>
         <h3 className="text-xs font-semibold text-[#8e8e93] uppercase tracking-wide mb-3">
-          Busiest hours (today, SF time)
+          Busiest hours
         </h3>
         <div className="flex items-end gap-0.5 h-16">
           {hourlyData.map(({ hour, count }) => (
