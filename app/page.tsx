@@ -8,13 +8,19 @@ import LeftPanel from "./components/LeftPanel"
 import Map, { type MapHandle } from "./components/Map"
 import DetailCard from "./components/DetailCard"
 import WelcomeModal from "./components/WelcomeModal"
-import { useTows } from "@/lib/useTows"
+import { useTows, sfDateString } from "@/lib/useTows"
 import type { Tow } from "@/lib/types"
 
 export default function Home() {
   const { tows, loading, todayCount } = useTows()
   const [selectedTow, setSelectedTow] = useState<Tow | null>(null)
+  const [todayOnly, setTodayOnly] = useState(false)
   const mapRef = useRef<MapHandle>(null)
+
+  const todayStr = sfDateString(new Date())
+  const visibleTows = todayOnly
+    ? tows.filter((t) => sfDateString(new Date(t.towed_at)) === todayStr)
+    : tows
 
   const handleSelect = useCallback((tow: Tow) => {
     setSelectedTow(tow)
@@ -31,28 +37,47 @@ export default function Home() {
   return (
     <div className="relative h-full w-full overflow-hidden">
       <LeftPanel
-        tows={tows}
+        tows={visibleTows}
         loading={loading}
         selectedId={selectedTow?.vehicle_id ?? null}
         onSelect={handleSelect}
       />
       <Map
         ref={mapRef}
-        tows={tows}
+        tows={visibleTows}
         onSelectTow={handleSelect}
       />
-      {/* Today's count badge */}
+      {/* Today's count badge + filter toggle */}
       {!loading && (
-        <div
-          className="absolute top-4 right-4 z-20 px-3.5 py-2 rounded-2xl text-[13px] font-semibold text-[#1c1c1e]"
-          style={{
-            background: "rgba(255,255,255,0.82)",
-            backdropFilter: "blur(20px)",
-            WebkitBackdropFilter: "blur(20px)",
-            boxShadow: "0 1px 8px rgba(0,0,0,0.12)",
-          }}
-        >
-          {todayCount} car{todayCount !== 1 ? "s" : ""} towed today
+        <div className="absolute top-4 right-4 z-20 flex flex-col items-end gap-1.5">
+          <div
+            className="px-3.5 py-2 rounded-2xl text-[13px] font-semibold text-[#1c1c1e]"
+            style={{
+              background: "rgba(255,255,255,0.82)",
+              backdropFilter: "blur(20px)",
+              WebkitBackdropFilter: "blur(20px)",
+              boxShadow: "0 1px 8px rgba(0,0,0,0.12)",
+            }}
+          >
+            {todayCount} car{todayCount !== 1 ? "s" : ""} towed today
+          </div>
+          <button
+            onClick={() => setTodayOnly((v) => !v)}
+            className="px-3 py-1.5 rounded-2xl text-[12px] font-semibold transition-all"
+            style={todayOnly ? {
+              background: "#007aff",
+              color: "#ffffff",
+              boxShadow: "0 1px 8px rgba(0,0,0,0.18)",
+            } : {
+              background: "rgba(255,255,255,0.82)",
+              backdropFilter: "blur(20px)",
+              WebkitBackdropFilter: "blur(20px)",
+              color: "#007aff",
+              boxShadow: "0 1px 8px rgba(0,0,0,0.12)",
+            }}
+          >
+            Today only
+          </button>
         </div>
       )}
 

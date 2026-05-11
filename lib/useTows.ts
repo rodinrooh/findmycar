@@ -4,7 +4,7 @@ import { useEffect, useState } from "react"
 import { supabase } from "./supabase"
 import type { Tow } from "./types"
 
-function sfDateString(date: Date): string {
+export function sfDateString(date: Date): string {
   return date.toLocaleDateString("en-CA", { timeZone: "America/Los_Angeles" }) // "YYYY-MM-DD"
 }
 
