@@ -58,7 +58,7 @@ export default function CarRow({ tow, selected, onClick }: CarRowProps) {
           color: "#fff",
           boxShadow: "0 1px 4px rgba(0,0,0,0.18)",
           fontSize: "15px",
-          fontWeight: 200,
+          fontWeight: 350,
           fontFamily: "-apple-system, BlinkMacSystemFont, sans-serif",
           letterSpacing: "0.5px",
         }}

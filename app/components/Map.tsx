@@ -148,7 +148,7 @@ const Map = forwardRef<MapHandle, MapProps>(function Map({ tows, onSelectTow }, 
             color:#fff;
             display:flex;align-items:center;justify-content:center;
             font-size:16px;
-            font-weight:200;
+            font-weight:350;
             font-family:-apple-system,BlinkMacSystemFont,sans-serif;
             letter-spacing:.5px;
             border:2px solid #fff;
