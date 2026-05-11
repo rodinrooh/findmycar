@@ -16,11 +16,12 @@ def _extract_fields(soup: BeautifulSoup) -> dict:
     """Build label→value dict from the colorAlternate row layout."""
     data = {}
     for row in soup.select("div.p-2.w-full.flex.colorAlternate"):
-        label_el = row.select_one("div:first-child span")
-        value_el = row.select_one("div:last-child span")
-        if label_el and value_el:
-            label = label_el.get_text(strip=True).rstrip(":")
-            data[label] = value_el.get_text(separator="\n", strip=True)
+        # Use recursive=False to get only direct children divs — CSS :last-child
+        # pseudo-selectors don't scope reliably in BeautifulSoup.
+        divs = row.find_all("div", recursive=False)
+        if len(divs) >= 2:
+            label = divs[0].get_text(strip=True).rstrip(":")
+            data[label] = divs[1].get_text(separator="\n", strip=True)
     return data
 
 
