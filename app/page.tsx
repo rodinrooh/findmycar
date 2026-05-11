@@ -29,16 +29,16 @@ export default function Home() {
 
   return (
     <div className="relative h-full w-full overflow-hidden">
-      <Map
-        ref={mapRef}
-        tows={tows}
-        onSelectTow={handleSelect}
-      />
       <LeftPanel
         tows={tows}
         loading={loading}
         selectedId={selectedTow?.vehicle_id ?? null}
         onSelect={handleSelect}
+      />
+      <Map
+        ref={mapRef}
+        tows={tows}
+        onSelectTow={handleSelect}
       />
       {selectedTow && (
         <DetailCard tow={selectedTow} onClose={handleClose} />

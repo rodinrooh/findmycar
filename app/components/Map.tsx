@@ -1,7 +1,7 @@
 "use client"
 
 import { forwardRef, useEffect, useImperativeHandle, useRef } from "react"
-import { getStatusColor } from "@/lib/colorMap"
+
 import type { Tow } from "@/lib/types"
 
 // mapkit is declared globally in lib/mapkit.d.ts
@@ -105,14 +105,8 @@ const Map = forwardRef<MapHandle, MapProps>(function Map({ tows, onSelectTow }, 
     // Add new annotations
     for (const tow of tows) {
       if (!tow.lat || !tow.lng) continue
-      if (existing.has(tow.vehicle_id)) {
-        const ann = existing.get(tow.vehicle_id)
-        const el = ann.element as HTMLDivElement | undefined
-        if (el) el.style.background = getStatusColor(tow.status)
-        continue
-      }
+      if (existing.has(tow.vehicle_id)) continue
 
-      const color = getStatusColor(tow.status)
       const initials = (tow.make ?? "??").slice(0, 2).toUpperCase()
 
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -123,11 +117,13 @@ const Map = forwardRef<MapHandle, MapProps>(function Map({ tows, onSelectTow }, 
           el.textContent = initials
           el.style.cssText = `
             width:34px;height:34px;border-radius:50%;
-            background:${color};color:#fff;
+            background:linear-gradient(145deg,#c7c7cc,#8e8e93);
+            color:#fff;
             display:flex;align-items:center;justify-content:center;
             font:700 11px/1 -apple-system,BlinkMacSystemFont,sans-serif;
             letter-spacing:.5px;
-            box-shadow:0 2px 8px rgba(0,0,0,.28);
+            border:2px solid #fff;
+            box-shadow:0 2px 8px rgba(0,0,0,.25);
             cursor:pointer;
           `
           return el

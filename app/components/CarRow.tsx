@@ -54,7 +54,12 @@ export default function CarRow({ tow, selected, onClick }: CarRowProps) {
       {/* Circle with make initials */}
       <div
         className="flex-shrink-0 w-[40px] h-[40px] rounded-full flex items-center justify-center text-[11px] font-semibold tracking-wide"
-        style={{ background: "#aeaeb2", color: "#fff" }}
+        style={{
+          background: "linear-gradient(145deg, #c7c7cc, #8e8e93)",
+          color: "#fff",
+          border: "2px solid #fff",
+          boxShadow: "0 1px 4px rgba(0,0,0,0.18)",
+        }}
       >
         {makeInitials(tow.make)}
       </div>
