@@ -119,14 +119,15 @@ def main() -> None:
         if result == tow_parser.ERROR_SENTINEL:
             consecutive_errors += 1
             if consecutive_errors >= 3:
-                # ID appears to be a permanent gap — skip it and move on
-                log.info("vehicle_id=%d skipped after %d attempts (gap in IDs).", next_id, consecutive_errors)
+                # Permanent gap — skip and move on
+                log.info("vehicle_id=%d skipped after %d attempts (gap).", next_id, consecutive_errors)
                 pointer = next_id
                 consecutive_errors = 0
                 time.sleep(random.uniform(1, 3))
             else:
-                log.info("vehicle_id=%d does not exist yet (attempt %d). Sleeping 60s.", next_id, consecutive_errors)
-                jitter_sleep(60, 3)
+                # Short wait — if we're catching up, gaps should resolve fast
+                log.info("vehicle_id=%d does not exist yet (attempt %d). Sleeping 10s.", next_id, consecutive_errors)
+                time.sleep(10)
             continue
 
         consecutive_errors = 0
