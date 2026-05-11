@@ -98,7 +98,7 @@ export default function WelcomeModal() {
             Find my (towed) car
           </button>
         </div>
-        <p className="text-[10px] text-[#c7c7cc] text-center pb-4 px-6 leading-snug font-normal">
+        <p className="text-[10px] text-[#aeaeb2] text-center pb-4 px-6 leading-snug font-normal">
           By Rodin Roohipour. Not affiliated with the San Francisco government, Apple&apos;s Find My, or AutoReturn/Autura.
         </p>
       </div>
