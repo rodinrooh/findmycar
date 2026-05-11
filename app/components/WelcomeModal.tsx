@@ -99,7 +99,7 @@ export default function WelcomeModal() {
           </button>
         </div>
         <p className="text-[10px] text-[#c7c7cc] text-center pb-4 px-6 leading-snug font-normal">
-          By Rodin Roohipour. Not affiliated with the San Francisco government or Apple&apos;s Find My.
+          By Rodin Roohipour. Not affiliated with the San Francisco government, Apple&apos;s Find My, or AutoReturn/Autura.
         </p>
       </div>
     </div>
