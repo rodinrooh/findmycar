@@ -30,6 +30,7 @@ const Map = forwardRef<MapHandle, MapProps>(function Map({ tows, onSelectTow }, 
     flyTo(lat: number, lng: number) {
       if (!mapRef.current) return
       mapRef.current.setCenterAnimated(new window.mapkit.Coordinate(lat, lng), true)
+      mapRef.current.setCameraDistanceAnimated(2500, true)
     },
   }))
 
