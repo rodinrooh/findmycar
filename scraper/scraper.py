@@ -110,6 +110,7 @@ def main() -> None:
         log.info("First ever run. Starting from vehicle_id=%d.", pointer)
 
     consecutive_errors = 0
+    last_confirmed = pointer  # last ID that actually existed (SF or not)
 
     while time.monotonic() - start_time < MAX_RUN_SECONDS:
         next_id = pointer + 1
@@ -120,21 +121,20 @@ def main() -> None:
         if result == tow_parser.ERROR_SENTINEL:
             consecutive_errors += 1
             if consecutive_errors >= 3:
-                # Permanent gap — skip and move on
                 log.info("vehicle_id=%d skipped after %d attempts (gap).", next_id, consecutive_errors)
                 pointer = next_id
                 consecutive_errors = 0
                 time.sleep(random.uniform(1, 3))
             else:
-                # Short wait — if we're catching up, gaps should resolve fast
                 log.info("vehicle_id=%d does not exist yet (attempt %d). Sleeping 10s.", next_id, consecutive_errors)
                 time.sleep(10)
             continue
 
+        # Page exists — update confirmed floor regardless of city
         consecutive_errors = 0
+        last_confirmed = next_id
 
         if result is None:
-            # Valid page but not SF — advance immediately
             log.info("vehicle_id=%d is not SF. Advancing.", next_id)
             pointer = next_id
             time.sleep(random.uniform(1, 3))
@@ -150,8 +150,9 @@ def main() -> None:
         time.sleep(random.uniform(1, 3))
 
     elapsed = time.monotonic() - start_time
-    db.save_pointer(client, pointer)
-    log.info("Scraper exiting after %.1fs. Final pointer: %d.", elapsed, pointer)
+    # Save last confirmed (existing) ID so frontier gaps get re-checked next run
+    db.save_pointer(client, last_confirmed)
+    log.info("Scraper exiting after %.1fs. Last confirmed: %d, final pointer: %d.", elapsed, last_confirmed, pointer)
 
 
 if __name__ == "__main__":
