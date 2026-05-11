@@ -87,9 +87,9 @@ export default function Leaderboard({ tows }: LeaderboardProps) {
   const todayStr = sfDateString(new Date())
   const todayTows = tows.filter((t) => sfDateString(new Date(t.towed_at)) === todayStr)
 
-  const neighborhoods = groupBy(todayTows, (t) => extractStreet(t.towed_from)).slice(0, 10)
-  const reasons = groupBy(todayTows, (t) => t.reason).slice(0, 5)
-  const hourlyData = buildHourlyData(todayTows)
+  const neighborhoods = groupBy(tows, (t) => extractStreet(t.towed_from)).slice(0, 10)
+  const reasons = groupBy(tows, (t) => t.reason).slice(0, 5)
+  const hourlyData = buildHourlyData(tows)
   const maxHourCount = Math.max(...hourlyData.map((h) => h.count), 1)
 
   return (
