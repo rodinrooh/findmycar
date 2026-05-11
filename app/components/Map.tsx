@@ -147,7 +147,7 @@ const Map = forwardRef<MapHandle, MapProps>(function Map({ tows, onSelectTow }, 
             background:linear-gradient(145deg,#adb2be,#717585);
             color:#fff;
             display:flex;align-items:center;justify-content:center;
-            font:300 16px/1 -apple-system,BlinkMacSystemFont,sans-serif;
+            font:400 16px/1 -apple-system,BlinkMacSystemFont,sans-serif;
             letter-spacing:.5px;
             border:2px solid #fff;
             box-shadow:0 2px 8px rgba(0,0,0,.25);

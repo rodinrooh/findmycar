@@ -57,7 +57,7 @@ export default function CarRow({ tow, selected, onClick }: CarRowProps) {
           background: "linear-gradient(145deg, #adb2be, #717585)",
           color: "#fff",
           boxShadow: "0 1px 4px rgba(0,0,0,0.18)",
-          font: "300 15px/1 -apple-system, BlinkMacSystemFont, sans-serif",
+          font: "400 15px/1 -apple-system, BlinkMacSystemFont, sans-serif",
           letterSpacing: "0.5px",
         }}
       >
