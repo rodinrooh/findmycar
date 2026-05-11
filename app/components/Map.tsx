@@ -137,11 +137,11 @@ const Map = forwardRef<MapHandle, MapProps>(function Map({ tows, onSelectTow }, 
           const el = document.createElement("div")
           el.textContent = initials
           el.style.cssText = `
-            width:34px;height:34px;border-radius:50%;
-            background:linear-gradient(145deg,#c7c7cc,#8e8e93);
+            width:40px;height:40px;border-radius:50%;
+            background:linear-gradient(145deg,#aeaeb2,#6d6d72);
             color:#fff;
             display:flex;align-items:center;justify-content:center;
-            font:700 11px/1 -apple-system,BlinkMacSystemFont,sans-serif;
+            font:700 12px/1 -apple-system,BlinkMacSystemFont,sans-serif;
             letter-spacing:.5px;
             border:2px solid #fff;
             box-shadow:0 2px 8px rgba(0,0,0,.25);
