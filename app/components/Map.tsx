@@ -8,6 +8,7 @@ import type { Tow } from "@/lib/types"
 
 export interface MapHandle {
   flyTo: (lat: number, lng: number) => void
+  resetView: () => void
 }
 
 interface MapProps {
@@ -29,8 +30,23 @@ const Map = forwardRef<MapHandle, MapProps>(function Map({ tows, onSelectTow }, 
   useImperativeHandle(ref, () => ({
     flyTo(lat: number, lng: number) {
       if (!mapRef.current) return
-      mapRef.current.setCenterAnimated(new window.mapkit.Coordinate(lat, lng), true)
-      mapRef.current.setCameraDistanceAnimated(2500, true)
+      const mk = window.mapkit
+      // Remove sidebar padding so car lands at true screen center
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      mapRef.current.padding = new (mk as any).Padding({ top: 0, right: 0, bottom: 0, left: 0 })
+      const region = new mk.CoordinateRegion(
+        new mk.Coordinate(lat, lng),
+        new mk.CoordinateSpan(0.018, 0.018)
+      )
+      mapRef.current.setRegionAnimated(region, true)
+    },
+    resetView() {
+      if (!mapRef.current) return
+      const mk = window.mapkit
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      mapRef.current.padding = new (mk as any).Padding({ top: 0, right: 0, bottom: 0, left: 320 })
+      mapRef.current.setCenterAnimated(new mk.Coordinate(SF_CENTER.latitude, SF_CENTER.longitude), true)
+      mapRef.current.cameraDistance = 20000
     },
   }))
 

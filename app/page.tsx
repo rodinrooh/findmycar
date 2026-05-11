@@ -25,6 +25,7 @@ export default function Home() {
 
   const handleClose = useCallback(() => {
     setSelectedTow(null)
+    mapRef.current?.resetView()
   }, [])
 
   return (
