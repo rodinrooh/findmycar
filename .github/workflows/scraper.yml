@@ -1,0 +1,33 @@
+name: Tow Scraper
+
+on:
+  schedule:
+    # Runs every 5 minutes (GitHub Actions minimum interval).
+    # Scraper loops internally for 4.5 min then exits, leaving a 30s gap.
+    - cron: "*/5 * * * *"
+  workflow_dispatch:
+
+jobs:
+  scrape:
+    runs-on: ubuntu-latest
+    timeout-minutes: 6
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: "pip"
+          cache-dependency-path: scraper/requirements.txt
+
+      - name: Install dependencies
+        run: pip install -r scraper/requirements.txt
+
+      - name: Run scraper
+        working-directory: scraper
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
+          MAPBOX_TOKEN: ${{ secrets.MAPBOX_TOKEN }}
+        run: python scraper.py
