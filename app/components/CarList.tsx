@@ -21,6 +21,10 @@ export default function CarList({ tows, selectedId, onSelect }: CarListProps) {
 
   return (
     <div className="overflow-y-auto flex-1">
+      <div className="mx-4 mt-2 mb-1 px-3 py-2 rounded-lg text-[11px] leading-snug text-[#7a5c00]"
+        style={{ background: "#fffbe6", border: "1px solid #f5d020" }}>
+        ⚠️ This site only worked for 4 hours until Autura added a firewall to the data source I was using. This data is a snapshot of how it looked on May 12, 2026 at 1:43 PM.
+      </div>
       {tows.map((tow) => (
         <CarRow
           key={tow.vehicle_id}
