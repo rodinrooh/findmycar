@@ -22,7 +22,7 @@ export default function CarList({ tows, selectedId, onSelect }: CarListProps) {
   return (
     <div className="overflow-y-auto flex-1">
       <p style={{
-        margin: "8px 16px 4px",
+        margin: "4px 16px 12px",
         padding: "10px 14px",
         borderRadius: "10px",
         background: "#fff5e0",
