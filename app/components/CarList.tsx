@@ -28,7 +28,7 @@ export default function CarList({ tows, selectedId, onSelect }: CarListProps) {
         background: "#fffbe6",
         border: "1px solid #f5d020",
         fontSize: "11px",
-        fontWeight: 300,
+        fontWeight: 400,
         fontFamily: "-apple-system, BlinkMacSystemFont, sans-serif",
         lineHeight: "1.5",
         color: "#7a5c00",
