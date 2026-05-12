@@ -111,8 +111,8 @@ export default function LeftPanel({ tows, selectedId, onSelect }: LeftPanelProps
             href="https://x.com/rodinrooh"
             target="_blank"
             rel="noopener noreferrer"
-            className="text-[10px] tracking-widest text-[#aeaeb2] hover:text-[#007aff] transition-colors leading-none"
-            style={{ fontWeight: 300, letterSpacing: "0.12em", marginTop: 3 }}
+            className="inline-flex items-center text-[10px] tracking-widest text-[#aeaeb2] hover:text-[#007aff] transition-colors"
+            style={{ fontWeight: 300, letterSpacing: "0.12em" }}
           >
             A RODIN PRODUCTION
           </a>
