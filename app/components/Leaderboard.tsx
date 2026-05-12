@@ -6,7 +6,7 @@ import type { Tow } from "@/lib/types"
 
 interface LeaderboardProps {
   tows: Tow[]
-  onFlyTo?: (tow: Tow) => void
+  onFlyToStreet?: (lat: number, lng: number) => void
 }
 
 interface CountEntry {
@@ -69,7 +69,7 @@ function sfDateString(date: Date): string {
   return date.toLocaleDateString("en-CA", { timeZone: "America/Los_Angeles" })
 }
 
-export default function Leaderboard({ tows, onFlyTo }: LeaderboardProps) {
+export default function Leaderboard({ tows, onFlyToStreet }: LeaderboardProps) {
   const [allTimeCount, setAllTimeCount] = useState<number | null>(null)
   const [weekCount, setWeekCount] = useState<number | null>(null)
 
@@ -112,13 +112,17 @@ export default function Leaderboard({ tows, onFlyTo }: LeaderboardProps) {
         ) : (
           <div className="space-y-1">
             {neighborhoods.map(({ label, count }, i) => {
-              const target = onFlyTo ? tows.find((t) => extractStreet(t.towed_from) === label && t.lat && t.lng) : undefined
+              const streetTows = tows.filter((t) => extractStreet(t.towed_from) === label && t.lat && t.lng)
+              const centroid = streetTows.length > 0 ? {
+                lat: streetTows.reduce((s, t) => s + t.lat!, 0) / streetTows.length,
+                lng: streetTows.reduce((s, t) => s + t.lng!, 0) / streetTows.length,
+              } : null
               return (
                 <div key={label} className="flex items-center gap-2">
                   <span className="text-xs text-[#8e8e93] w-4">{i + 1}</span>
-                  {target ? (
+                  {centroid && onFlyToStreet ? (
                     <button
-                      onClick={() => onFlyTo!(target)}
+                      onClick={() => onFlyToStreet(centroid.lat, centroid.lng)}
                       className="flex-1 text-sm text-[#007aff] truncate text-left underline"
                     >
                       {label}

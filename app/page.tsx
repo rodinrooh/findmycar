@@ -34,6 +34,11 @@ export default function Home() {
     mapRef.current?.resetView()
   }, [])
 
+  const handleFlyToStreet = useCallback((lat: number, lng: number) => {
+    setSelectedTow(null)
+    mapRef.current?.flyToStreet(lat, lng)
+  }, [])
+
   return (
     <div className="relative h-full w-full overflow-hidden">
       <LeftPanel
@@ -41,7 +46,7 @@ export default function Home() {
         loading={loading}
         selectedId={selectedTow?.vehicle_id ?? null}
         onSelect={handleSelect}
-        onFlyTo={handleSelect}
+        onFlyToStreet={handleFlyToStreet}
       />
       <Map
         ref={mapRef}

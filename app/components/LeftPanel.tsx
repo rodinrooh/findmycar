@@ -13,7 +13,7 @@ interface LeftPanelProps {
   loading: boolean
   selectedId: number | null
   onSelect: (tow: Tow) => void
-  onFlyTo?: (tow: Tow) => void
+  onFlyToStreet?: (lat: number, lng: number) => void
 }
 
 const GLASS: React.CSSProperties = {
@@ -22,7 +22,7 @@ const GLASS: React.CSSProperties = {
   WebkitBackdropFilter: "blur(24px)",
 }
 
-export default function LeftPanel({ tows, selectedId, onSelect, onFlyTo }: LeftPanelProps) {
+export default function LeftPanel({ tows, selectedId, onSelect, onFlyToStreet }: LeftPanelProps) {
   const [tab, setTab] = useState<Tab>("cars")
   const [search, setSearch] = useState("")
   const [mobileExpanded, setMobileExpanded] = useState(false)
@@ -72,7 +72,7 @@ export default function LeftPanel({ tows, selectedId, onSelect, onFlyTo }: LeftP
         {tab === "cars" ? (
           <CarList tows={filtered} selectedId={selectedId} onSelect={onSelect} />
         ) : (
-          <Leaderboard tows={tows} onFlyTo={onFlyTo} />
+          <Leaderboard tows={tows} onFlyToStreet={onFlyToStreet} />
         )}
       </div>
       <div className="px-5 py-3 flex items-center justify-between" style={{ borderTop: "1px solid rgba(0,0,0,0.06)" }}>

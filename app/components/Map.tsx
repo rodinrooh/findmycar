@@ -8,6 +8,7 @@ import type { Tow } from "@/lib/types"
 
 export interface MapHandle {
   flyTo: (lat: number, lng: number) => void
+  flyToStreet: (lat: number, lng: number) => void
   resetView: () => void
 }
 
@@ -38,6 +39,19 @@ const Map = forwardRef<MapHandle, MapProps>(function Map({ tows, onSelectTow }, 
         new mk.Coordinate(lat, lng),
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         new (mk as any).CoordinateSpan(0.008, 0.008)
+      )
+      mapRef.current.setRegionAnimated(region, true)
+    },
+    flyToStreet(lat: number, lng: number) {
+      if (!mapRef.current) return
+      const mk = window.mapkit
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      mapRef.current.padding = new (mk as any).Padding({ top: 0, right: 0, bottom: 0, left: 0 })
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const region = new (mk as any).CoordinateRegion(
+        new mk.Coordinate(lat, lng),
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        new (mk as any).CoordinateSpan(0.02, 0.02)
       )
       mapRef.current.setRegionAnimated(region, true)
     },
@@ -161,8 +175,8 @@ const Map = forwardRef<MapHandle, MapProps>(function Map({ tows, onSelectTow }, 
           })
           return el
         },
-        // enabled:false prevents MapKit from handling selection/deselect (and auto-adjusting viewport)
-        { anchorOffset: new DOMPoint(0, 0), enabled: false }
+        // calloutEnabled:false prevents MapKit from adjusting viewport on annotation select/deselect
+        { anchorOffset: new DOMPoint(0, 0), calloutEnabled: false }
       )
       map.addAnnotation(annotation)
       existing.set(tow.vehicle_id, annotation)

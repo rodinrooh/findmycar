@@ -32,16 +32,6 @@ export default function DetailCard({ tow, onClose }: DetailCardProps) {
   const cardRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
-    function handleClick(e: MouseEvent) {
-      if (cardRef.current && !cardRef.current.contains(e.target as Node)) {
-        onClose()
-      }
-    }
-    document.addEventListener("mousedown", handleClick)
-    return () => document.removeEventListener("mousedown", handleClick)
-  }, [onClose])
-
-  useEffect(() => {
     function handleKey(e: KeyboardEvent) {
       if (e.key === "Escape") onClose()
     }
