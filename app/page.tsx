@@ -41,6 +41,7 @@ export default function Home() {
         loading={loading}
         selectedId={selectedTow?.vehicle_id ?? null}
         onSelect={handleSelect}
+        onFlyTo={handleSelect}
       />
       <Map
         ref={mapRef}

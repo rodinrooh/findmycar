@@ -6,6 +6,7 @@ import type { Tow } from "@/lib/types"
 
 interface LeaderboardProps {
   tows: Tow[]
+  onFlyTo?: (tow: Tow) => void
 }
 
 interface CountEntry {
@@ -68,7 +69,7 @@ function sfDateString(date: Date): string {
   return date.toLocaleDateString("en-CA", { timeZone: "America/Los_Angeles" })
 }
 
-export default function Leaderboard({ tows }: LeaderboardProps) {
+export default function Leaderboard({ tows, onFlyTo }: LeaderboardProps) {
   const [allTimeCount, setAllTimeCount] = useState<number | null>(null)
   const [weekCount, setWeekCount] = useState<number | null>(null)
 
@@ -110,13 +111,25 @@ export default function Leaderboard({ tows }: LeaderboardProps) {
           <div className="text-sm text-[#8e8e93]">No data yet</div>
         ) : (
           <div className="space-y-1">
-            {neighborhoods.map(({ label, count }, i) => (
-              <div key={label} className="flex items-center gap-2">
-                <span className="text-xs text-[#8e8e93] w-4">{i + 1}</span>
-                <div className="flex-1 text-sm text-[#1c1c1e] truncate">{label}</div>
-                <span className="text-xs font-semibold text-[#8e8e93]">{count}</span>
-              </div>
-            ))}
+            {neighborhoods.map(({ label, count }, i) => {
+              const target = onFlyTo ? tows.find((t) => extractStreet(t.towed_from) === label && t.lat && t.lng) : undefined
+              return (
+                <div key={label} className="flex items-center gap-2">
+                  <span className="text-xs text-[#8e8e93] w-4">{i + 1}</span>
+                  {target ? (
+                    <button
+                      onClick={() => onFlyTo!(target)}
+                      className="flex-1 text-sm text-[#007aff] truncate text-left underline"
+                    >
+                      {label}
+                    </button>
+                  ) : (
+                    <div className="flex-1 text-sm text-[#1c1c1e] truncate">{label}</div>
+                  )}
+                  <span className="text-xs font-semibold text-[#8e8e93]">{count}</span>
+                </div>
+              )
+            })}
           </div>
         )}
       </section>

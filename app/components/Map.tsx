@@ -155,12 +155,15 @@ const Map = forwardRef<MapHandle, MapProps>(function Map({ tows, onSelectTow }, 
             box-shadow:0 2px 8px rgba(0,0,0,.25);
             cursor:pointer;
           `
+          el.addEventListener("click", (e) => {
+            e.stopPropagation()
+            onSelectTow(tow)
+          })
           return el
         },
-        { anchorOffset: new DOMPoint(0, 0) }
+        // enabled:false prevents MapKit from handling selection/deselect (and auto-adjusting viewport)
+        { anchorOffset: new DOMPoint(0, 0), enabled: false }
       )
-
-      annotation.addEventListener("select", () => onSelectTow(tow))
       map.addAnnotation(annotation)
       existing.set(tow.vehicle_id, annotation)
     }
