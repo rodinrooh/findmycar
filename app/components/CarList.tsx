@@ -23,15 +23,15 @@ export default function CarList({ tows, selectedId, onSelect }: CarListProps) {
     <div className="overflow-y-auto flex-1">
       <p style={{
         margin: "8px 16px 4px",
-        padding: "8px 12px",
-        borderRadius: "8px",
+        padding: "10px 14px",
+        borderRadius: "10px",
         background: "#fff5e0",
         border: "1px solid #f0b429",
-        fontSize: "11px",
-        fontWeight: 500,
+        fontSize: "13px",
+        fontWeight: 600,
         fontFamily: "-apple-system, BlinkMacSystemFont, sans-serif",
         lineHeight: "1.5",
-        color: "#7a5c00",
+        color: "#92400e",
       }}>
         This site only worked for 4 hours until Autura added a firewall to the data source I was using. This data is a snapshot of how it looked on May 12, 2026 at 1:43 PM.
       </p>
