@@ -139,37 +139,6 @@ export default function Leaderboard({ tows, onFlyToStreet }: LeaderboardProps) {
         )}
       </section>
 
-      {/* Top makes */}
-      <section>
-        <h3 className="text-xs font-semibold text-[#8e8e93] uppercase tracking-wide mb-2">
-          Most towed makes
-        </h3>
-        {makes.length === 0 ? (
-          <div className="text-sm text-[#8e8e93]">No data yet</div>
-        ) : (
-          <div className="space-y-1.5">
-            {makes.map(({ label, count }, i) => {
-              const pct = Math.round((count / makes[0].count) * 100)
-              return (
-                <div key={label}>
-                  <div className="flex items-center gap-2 mb-0.5">
-                    <span className="text-xs text-[#8e8e93] w-4">{i + 1}</span>
-                    <div className="flex-1 text-sm text-[#1c1c1e] truncate">{label}</div>
-                    <span className="text-xs font-semibold text-[#8e8e93]">{count}</span>
-                  </div>
-                  <div className="ml-6 h-1 rounded-full bg-[#e5e5ea] overflow-hidden">
-                    <div
-                      className="h-full rounded-full"
-                      style={{ width: `${pct}%`, background: "#007aff", opacity: 0.6 }}
-                    />
-                  </div>
-                </div>
-              )
-            })}
-          </div>
-        )}
-      </section>
-
       {/* Top reasons */}
       <section>
         <h3 className="text-xs font-semibold text-[#8e8e93] uppercase tracking-wide mb-2">
@@ -212,6 +181,37 @@ export default function Leaderboard({ tows, onFlyToStreet }: LeaderboardProps) {
             </div>
           ))}
         </div>
+      </section>
+
+      {/* Top makes */}
+      <section>
+        <h3 className="text-xs font-semibold text-[#8e8e93] uppercase tracking-wide mb-2">
+          Most towed makes
+        </h3>
+        {makes.length === 0 ? (
+          <div className="text-sm text-[#8e8e93]">No data yet</div>
+        ) : (
+          <div className="space-y-1.5">
+            {makes.map(({ label, count }, i) => {
+              const pct = Math.round((count / makes[0].count) * 100)
+              return (
+                <div key={label}>
+                  <div className="flex items-center gap-2 mb-0.5">
+                    <span className="text-xs text-[#8e8e93] w-4">{i + 1}</span>
+                    <div className="flex-1 text-sm text-[#1c1c1e] truncate">{label}</div>
+                    <span className="text-xs font-semibold text-[#8e8e93]">{count}</span>
+                  </div>
+                  <div className="ml-6 h-1 rounded-full bg-[#e5e5ea] overflow-hidden">
+                    <div
+                      className="h-full rounded-full"
+                      style={{ width: `${pct}%`, background: "#007aff", opacity: 0.6 }}
+                    />
+                  </div>
+                </div>
+              )
+            })}
+          </div>
+        )}
       </section>
     </div>
   )
