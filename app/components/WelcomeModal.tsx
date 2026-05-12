@@ -117,7 +117,7 @@ export default function WelcomeModal({ open: openProp, onClose: onCloseProp }: W
             href="https://x.com/rodinrooh"
             target="_blank"
             rel="noopener noreferrer"
-            className="hover:text-[#007aff] transition-colors"
+            className="underline hover:text-[#007aff] transition-colors"
           >
             Rodin Roohipour
           </a>
