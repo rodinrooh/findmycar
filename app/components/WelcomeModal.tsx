@@ -112,7 +112,16 @@ export default function WelcomeModal({ open: openProp, onClose: onCloseProp }: W
           </button>
         </div>
         <p className="text-[10px] text-[#aeaeb2] text-center pb-4 px-6 leading-snug font-light">
-          By Rodin Roohipour. Not affiliated with the San Francisco government, Apple&apos;s Find My, or AutoReturn/Autura.
+          By{" "}
+          <a
+            href="https://x.com/rodinrooh"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="hover:text-[#007aff] transition-colors"
+          >
+            Rodin Roohipour
+          </a>
+          . Not affiliated with the San Francisco government, Apple&apos;s Find My, or AutoReturn/Autura.
         </p>
       </div>
     </div>

@@ -101,10 +101,21 @@ export default function LeftPanel({ tows, selectedId, onSelect }: LeftPanelProps
         className="hidden md:flex absolute left-0 top-0 h-full flex-col"
         style={{ width: 320, borderRight: "1px solid rgba(0,0,0,0.1)", zIndex: 10, ...GLASS }}
       >
-        <div className="px-4 pt-4 pb-2 flex items-center gap-1.5">
-          <div className="w-3 h-3 rounded-full" style={{ background: "#ff5f57" }} />
-          <div className="w-3 h-3 rounded-full" style={{ background: "#febc2e" }} />
-          <div className="w-3 h-3 rounded-full" style={{ background: "#28c840" }} />
+        <div className="px-4 pt-4 pb-2 flex items-center justify-between">
+          <div className="flex items-center gap-1.5">
+            <div className="w-3 h-3 rounded-full" style={{ background: "#ff5f57" }} />
+            <div className="w-3 h-3 rounded-full" style={{ background: "#febc2e" }} />
+            <div className="w-3 h-3 rounded-full" style={{ background: "#28c840" }} />
+          </div>
+          <a
+            href="https://x.com/rodinrooh"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-[10px] tracking-widest text-[#aeaeb2] hover:text-[#007aff] transition-colors"
+            style={{ fontWeight: 400, letterSpacing: "0.12em" }}
+          >
+            A RODIN PRODUCTION
+          </a>
         </div>
         {body}
       </div>
